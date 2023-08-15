@@ -24,7 +24,7 @@ func NewAccountLogic(ctx context.Context, svcCtx *svc.ServiceContext) *AccountLo
 }
 
 func (l *AccountLogic) Account(req *types.Request) (resp *types.Response, err error) {
-	// todo: add your logic here and delete this line
-
+	resp = new(types.Response)
+	resp.Message = req.Name
 	return
 }
