@@ -8,6 +8,7 @@ import (
 	"go-zero-demo/cmd/account/internal/svc"
 	"go-zero-demo/cmd/account/internal/types"
 	"go-zero-demo/cmd/account/model"
+	"go-zero-demo/pkg/cryptx"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -27,10 +28,11 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
+	encryptedPassword := cryptx.PasswordEncrypt(l.svcCtx.Config.Salt, req.Password)
 	record := &model.TbUserAccount{
 		AccountName: req.AccountName,
 		Password: sql.NullString{
-			String: req.Password,
+			String: encryptedPassword,
 			Valid:  true,
 		},
 	}
@@ -39,7 +41,7 @@ func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterRe
 	resp = new(types.RegisterResp)
 	if err != nil {
 		resp.Result = _const.ApiFailed
-		resp.Message = fmt.Sprintf("result: %#v, err:%v", result, err)
+		resp.Message = fmt.Sprintf("result: %#v, err: %v", result, err)
 	} else {
 		resp.Result = _const.ApiSuccess
 	}

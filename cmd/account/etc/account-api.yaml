@@ -4,3 +4,5 @@ Port: 8888
 
 MySQL:
   DataSource: root:123456@tcp(localhost:3306)/chat?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+
+Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe

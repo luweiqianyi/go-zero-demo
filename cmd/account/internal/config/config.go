@@ -8,4 +8,6 @@ type Config struct {
 	MySQL struct {
 		DataSource string
 	}
+
+	Salt string
 }
