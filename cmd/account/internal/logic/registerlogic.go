@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	_const "go-zero-demo/cmd/account/internal/const"
+	"go-zero-demo/cmd/account/internal/service"
 
 	"go-zero-demo/cmd/account/internal/svc"
 	"go-zero-demo/cmd/account/internal/types"
@@ -24,7 +26,13 @@ func NewRegisterLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Register
 }
 
 func (l *RegisterLogic) Register(req *types.RegisterReq) (resp *types.RegisterResp, err error) {
-	// todo: add your logic here and delete this line
-
+	err = service.Register(req.AccountName, req.Password)
+	resp = new(types.RegisterResp)
+	if err != nil {
+		resp.Result = _const.ApiFailed
+		resp.Message = err.Error()
+	} else {
+		resp.Result = _const.ApiSuccess
+	}
 	return
 }

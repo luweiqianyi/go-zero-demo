@@ -15,8 +15,8 @@ type CommonResp struct {
 }
 
 type RegisterReq struct {
-	AccountName string `json:"accountName"`
-	Password    string `json:"password"`
+	AccountName string `form:"accountName"`
+	Password    string `form:"password"`
 }
 
 type RegisterResp struct {
