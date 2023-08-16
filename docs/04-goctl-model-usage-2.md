@@ -1,5 +1,5 @@
 # 使用goctl model自动生成的代码完成业务过程
-本文档沿袭`goctl-model-usage.md`,使用该文章自动生成的代码完成业务过程`register`。详细步骤如下所示：
+本文档沿袭`03-goctl-model-usage.md`,使用该文章自动生成的代码完成业务过程`register`。详细步骤如下所示：
 
 1. `account-api.yaml`配置要访问的数据库信息:
     ```yaml
