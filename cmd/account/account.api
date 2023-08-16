@@ -1,12 +1,32 @@
 type Request {
-	Name string `path:"name"`//,options=you|me
+	Name string `path:"name"`
 }
 
 type Response {
 	Message string `json:"message"`
 }
 
+type CommonResp {
+	Result  string `json:"result"`
+	Message string `json:"message,omitempty"` // omitempty: allow to omit
+}
+
+type (
+	RegisterReq {
+		AccountName string `json:"accountName"`
+		Password    string `json:"password"`
+	}
+
+	RegisterResp {
+		CommonResp
+		AccessToken string `json:"token"`
+	}
+)
+
 service account-api {
 	@handler AccountHandler
 	get /from/:name(Request) returns (Response)
+	
+	@handler RegisterHandler
+	post /register(RegisterReq) returns (RegisterResp)
 }
