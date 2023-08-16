@@ -6,14 +6,14 @@
 account.api定义注册请求、响应、请求方式(get/post)、`handler`如下
 ```go
 type (
-RegisterReq {
-AccountName string `form:"accountName"`
-Password    string `form:"password"`
-}
+    RegisterReq {
+        AccountName string `form:"accountName"`
+        Password    string `form:"password"`
+    }
 
-RegisterResp {
-CommonResp
-}
+    RegisterResp {
+        CommonResp
+    }
 )
 
 
