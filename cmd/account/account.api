@@ -19,7 +19,6 @@ type (
 
 	RegisterResp {
 		CommonResp
-		AccessToken string `json:"token"`
 	}
 )
 

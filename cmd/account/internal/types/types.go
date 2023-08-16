@@ -21,5 +21,4 @@ type RegisterReq struct {
 
 type RegisterResp struct {
 	CommonResp
-	AccessToken string `json:"token"`
 }
