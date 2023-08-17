@@ -1,0 +1,1 @@
+docker build -f account.Dockerfile -t account:1.0.0 .
