@@ -9,5 +9,6 @@ type Config struct {
 		DataSource string
 	}
 
-	Salt string
+	Salt           string
+	TokenSecretKey string
 }
