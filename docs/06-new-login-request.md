@@ -19,4 +19,5 @@ call run-docker-compose.bat
 ![](./imgs/postman-login-request.png)
 
 ## jwt token生成
+参加`git`提交记录`SHA-1: 36eff300165c5755fa0bd96ecaaa8731ef5e4cc5`,开源项目地址: `https://github.com/luweiqianyi/go-zero-demo.git`
 ![](./imgs/postman-login-request-jwt-token.png)
