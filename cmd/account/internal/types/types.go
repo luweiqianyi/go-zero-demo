@@ -22,3 +22,13 @@ type RegisterReq struct {
 type RegisterResp struct {
 	CommonResp
 }
+
+type LoginReq struct {
+	AccountName string `form:"accountName"`
+	Password    string `form:"password"`
+}
+
+type LoginResp struct {
+	CommonResp
+	Token string `form:"token"`
+}

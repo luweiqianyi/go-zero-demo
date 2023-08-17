@@ -22,10 +22,25 @@ type (
 	}
 )
 
+type (
+	LoginReq {
+		AccountName string `form:"accountName"`
+		Password    string `form:"password"`
+	}
+
+	LoginResp {
+		CommonResp
+		Token string `form:"token"`
+	}
+)
+
 service account-api {
 	@handler AccountHandler
 	get /from/:name(Request) returns (Response)
 	
 	@handler RegisterHandler
 	post /register(RegisterReq) returns (RegisterResp)
+	
+	@handler LoginHandler
+	post  /login(LoginReq) returns (LoginResp)
 }
