@@ -16,3 +16,12 @@ services:
       - "8002:8002"
     volumes:
       - ./account/etc/account-api.yaml:/usr/local/bin/account/etc/account-api.yaml
+    networks:
+      - default
+      - external_network
+
+
+networks:
+  external_network:
+    external:
+      name: chat-services_default
