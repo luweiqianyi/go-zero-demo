@@ -2,6 +2,8 @@ package logic
 
 import (
 	"context"
+	"errors"
+	"go-zero-demo/pkg/store"
 
 	"go-zero-demo/cmd/account-rpc/internal/svc"
 	"go-zero-demo/cmd/account-rpc/pb"
@@ -24,6 +26,19 @@ func NewValidateTokenLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Val
 }
 
 func (l *ValidateTokenLogic) ValidateToken(in *pb.TokenValidateReq) (*pb.TokenValidateResp, error) {
+	token, err := store.Get(in.AccountName)
+	if err != nil {
+		return &pb.TokenValidateResp{
+			Ok: false,
+		}, nil
+	}
+
+	if token != in.Token {
+		return &pb.TokenValidateResp{
+			Ok: false,
+		}, errors.New("token error")
+	}
+
 	return &pb.TokenValidateResp{
 		Ok: true,
 	}, nil

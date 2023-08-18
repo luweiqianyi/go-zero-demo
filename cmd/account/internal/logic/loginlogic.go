@@ -5,6 +5,7 @@ import (
 	"fmt"
 	_const "go-zero-demo/cmd/account/internal/const"
 	"go-zero-demo/pkg/cryptx"
+	"go-zero-demo/pkg/store"
 	"go-zero-demo/pkg/token"
 	"time"
 
@@ -62,6 +63,13 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	if err != nil {
 		resp.Result = _const.ApiFailed
 		resp.Message = fmt.Sprintf("token generate failed, err: %v", err)
+		return
+	}
+
+	err = store.Set(req.AccountName, accessToken, 3600*15) // 设置15天
+	if err != nil {
+		resp.Result = _const.ApiFailed
+		resp.Message = fmt.Sprintf("token store failed, err: %v", err)
 		return
 	}
 
