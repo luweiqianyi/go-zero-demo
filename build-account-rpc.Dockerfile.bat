@@ -1,0 +1,1 @@
+docker build -f account-rpc.Dockerfile -t account-rpc:1.0.0 .

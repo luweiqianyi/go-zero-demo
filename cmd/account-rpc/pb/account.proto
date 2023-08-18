@@ -4,6 +4,15 @@ option go_package = "./pb";
 
 package pb;
 
-message AccountValidateReq{
-  string token = 1;
+message TokenValidateReq{
+  string accountName=1;
+  string token = 2;
+}
+
+message TokenValidateResp{
+  bool ok=1;
+}
+
+service AccountRpcService{
+  rpc ValidateToken(TokenValidateReq) returns(TokenValidateResp);
 }

@@ -20,6 +20,13 @@ services:
       - default
       - external_network
 
+  account-rpc:
+    image: account-rpc:1.0.0
+    container_name: account-rpc
+    ports:
+      - "8003:8003"
+    volumes:
+      - ./account-rpc/etc/account.yaml:/usr/local/bin/account-rpc/etc/account.yaml
 
 networks:
   external_network:
