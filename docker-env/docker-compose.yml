@@ -28,6 +28,14 @@ services:
     volumes:
       - ./account-rpc/etc/account.yaml:/usr/local/bin/account-rpc/etc/account.yaml
 
+  userinfo-api:
+    image: userinfo-api:1.0.0
+    container_name: userinfo-api
+    ports:
+      - "8006:8006"
+    volumes:
+      - ./userinfo-api/etc/userinfo-api.yaml:/usr/local/bin/userinfo-api/etc/userinfo-api.yaml
+
 networks:
   external_network:
     external:

@@ -1,4 +1,4 @@
-# 鉴权
+# 统一鉴权
 ## 鉴权流程
 鉴权流程主要分以下三个过程
 * **过程一**：`account`服务在处理`/login`接口时会生成一个关于该登录用户账号的`token`，将其存储到后端`redis`中。
@@ -58,7 +58,11 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 * 验证该`token`是否和客户端上传的数据匹配即可
 
 ### 过程三
-重新写一个叫做`userinfo-api`的服务，端口地址暂时可以定为`8004`，该服务的主要功能就是用来修改某账号的用户信息。该服务本身不和`account-rpc`服务进行通信。这里暂时随便提供一个叫做`/hello`的接口，就用来向客户端返回字符串`hello`。
+重新写一个叫做`userinfo-api`的服务，端口地址暂时可以定为`8006`，该服务的主要功能就是用来修改某账号的用户信息。该服务本身不和`account-rpc`服务进行通信。这里暂时随便提供一个叫做`/hello`的接口，就用来向客户端返回字符串`Hello, visitor!`。
 
 前端的访问逻辑是通过访问地址:`http://localhost:8888/userinfo/hello`来访问。
-在前面文档`06-gateway-config-add-nginx-proxy.md`中说过，我们打算用`nginx`来对后端服务进行一个代理,而`8888`端口正是`Docker`环境下，提供给外部客户端的访问容器环境`nginx服务`的端口。而`/userinfo/hello`路径会被`nginx服务`，转发到我们这里的`userinfo-api`服务，通过在`nginx`的配置文件中, 我们在请求由`userinfo-api`服务处理之前先将请求转发给`account-rpc`服务进行一个身份鉴权，身份鉴权成功才继续交由`userinfo-api`服务处理，身份鉴权失败，则直接返回给客户端。那么也就是说，如果鉴权成功的话，客户端访问`http://localhost:8888/userinfo/hello`在响应中会得到字符串`hello`。
+
+在前面文档`06-gateway-config-add-nginx-proxy.md`中说过，我们打算用`nginx`来对后端服务进行一个代理,而`8888`端口正是`Docker`环境下，提供给外部客户端的访问容器环境`nginx服务`的端口。而`/userinfo/hello`路径会被`nginx服务`，转发到我们这里的`userinfo-api`服务，通过在`nginx`的配置文件中, 我们在请求由`userinfo-api`服务处理之前先将请求转发给`account-rpc`服务进行一个身份鉴权，身份鉴权成功才继续交由`userinfo-api`服务处理，身份鉴权失败，则直接返回给客户端。那么也就是说，如果鉴权成功的话，客户端访问`http://localhost:8888/userinfo/hello`在响应中会得到字符串`Hello, visitor!`。
+
+具体在`Docker`环境中如何部署`userinfo-api`参照文章`06-account-docker-image-build.md`。
+

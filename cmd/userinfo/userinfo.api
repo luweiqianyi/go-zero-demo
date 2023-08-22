@@ -1,0 +1,13 @@
+type HelloRequest {
+	Name string `path:"name"`
+}
+
+type HelloResponse {
+	Message string `json:"message"`
+}
+
+// goctl api go -api userinfo.api -dir . -style gozero
+service userinfo-api {
+	@handler HelloHandler
+	get /:name(HelloRequest) returns (HelloResponse)
+}
