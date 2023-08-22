@@ -5,14 +5,23 @@ option go_package = "./pb";
 package pb;
 
 message TokenValidateReq{
-  string accountName=1;
-  string token = 2;
+  string token=1;
 }
 
 message TokenValidateResp{
   bool ok=1;
 }
 
+message GenerateTokenReq{
+  string accountName=1;
+}
+
+message GenerateTokenResp{
+  bool success=1;
+  string token=2;
+}
+
 service AccountRpcService{
+  rpc GenerateToken(GenerateTokenReq) returns(GenerateTokenResp);
   rpc ValidateToken(TokenValidateReq) returns(TokenValidateResp);
 }

@@ -1,9 +1,12 @@
 Name: account-api
 Host: 0.0.0.0
-Port: 8888
+Port: 8002
 
 MySQL:
   DataSource: root:123456@tcp(localhost:3306)/chat?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
 
 Salt: HWVOFkGgPTryzICwd7qnJaZR9KQ2i8xe
-TokenSecretKey: my-token-secret
+
+AccountRpcConf:
+  Endpoints:
+    - 127.0.0.1:8003

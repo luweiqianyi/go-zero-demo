@@ -1,19 +1,25 @@
 package token
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"time"
 )
 
 type CustomClaims struct {
-	Data interface{} `json:"data""`
+	Data string `json:"data"`
 	jwt.StandardClaims
 }
 
 func GenerateToken(secretKey string, data interface{}, expireTime time.Duration) (string, error) {
+	byteData, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
+
 	tokenClaims := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"data": data,
+		"data": string(byteData),
 		"exp":  time.Now().Add(expireTime).Unix(),
 	})
 
@@ -31,12 +37,12 @@ func ParseToken(tokenString string, secretKey string) (interface{}, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	if claims, ok := token.Claims.(*CustomClaims); ok && token.Valid {
 		return claims.Data, nil
 	}
 
-	return nil, fmt.Errorf("invalid token")
+	return "", fmt.Errorf("invalid token")
 }

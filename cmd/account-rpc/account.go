@@ -3,8 +3,11 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/zeromicro/go-zero/core/stores/redis"
+	"go-zero-demo/pkg/store"
 	"os"
 	"path/filepath"
+	"time"
 
 	"go-zero-demo/cmd/account-rpc/internal/config"
 	"go-zero-demo/cmd/account-rpc/internal/server"
@@ -31,6 +34,16 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 	ctx := svc.NewServiceContext(c)
+
+	conf := redis.RedisConf{
+		Host:        "127.0.0.1:6379",
+		Type:        "node",
+		Pass:        "",
+		Tls:         false,
+		NonBlock:    false,
+		PingTimeout: time.Second,
+	}
+	store.MustUseRedisStore(conf)
 
 	s := zrpc.MustNewServer(c.RpcServerConf, func(grpcServer *grpc.Server) {
 		pb.RegisterAccountRpcServiceServer(grpcServer, server.NewAccountRpcServiceServer(ctx))

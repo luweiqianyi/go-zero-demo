@@ -32,3 +32,11 @@ type LoginResp struct {
 	CommonResp
 	Token string `form:"token"`
 }
+
+type AuthorizationReq struct {
+	AccessToken string `header:"access-token"`
+}
+
+type AuthorizationResp struct {
+	CommonResp
+}

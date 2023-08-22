@@ -3,9 +3,9 @@ package logic
 import (
 	"context"
 	"fmt"
+	"go-zero-demo/cmd/account-rpc/accountrpcservice"
 	_const "go-zero-demo/cmd/account/internal/const"
 	"go-zero-demo/pkg/cryptx"
-	"go-zero-demo/pkg/token"
 	"time"
 
 	"go-zero-demo/cmd/account/internal/svc"
@@ -22,11 +22,6 @@ type LoginLogic struct {
 	logx.Logger
 	ctx    context.Context
 	svcCtx *svc.ServiceContext
-}
-
-type TokenData struct {
-	AccountName string `json:"accountName"`
-	Password    string `json:"password"`
 }
 
 func NewLoginLogic(ctx context.Context, svcCtx *svc.ServiceContext) *LoginLogic {
@@ -54,11 +49,12 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 		return
 	}
 
-	tokenData := TokenData{
-		AccountName: req.AccountName,
-		Password:    req.Password,
-	}
-	accessToken, err := token.GenerateToken(l.svcCtx.Config.TokenSecretKey, tokenData, TokenExpireTime)
+	generateTokenResp, err := l.svcCtx.AccountRpcClient.GenerateToken(
+		context.Background(),
+		&accountrpcservice.GenerateTokenReq{
+			AccountName: req.AccountName,
+		},
+	)
 	if err != nil {
 		resp.Result = _const.ApiFailed
 		resp.Message = fmt.Sprintf("token generate failed, err: %v", err)
@@ -66,6 +62,6 @@ func (l *LoginLogic) Login(req *types.LoginReq) (resp *types.LoginResp, err erro
 	}
 
 	resp.Result = _const.ApiSuccess
-	resp.Token = accessToken
+	resp.Token = generateTokenResp.Token
 	return
 }

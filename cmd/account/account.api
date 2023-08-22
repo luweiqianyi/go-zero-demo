@@ -34,6 +34,16 @@ type (
 	}
 )
 
+type (
+	AuthorizationReq {
+		AccessToken string `header:"access-token"`
+	}
+
+	AuthorizationResp {
+		CommonResp
+	}
+)
+
 service account-api {
 	@handler AccountHandler
 	get /from/:name(Request) returns (Response)
@@ -43,4 +53,7 @@ service account-api {
 	
 	@handler LoginHandler
 	post  /login(LoginReq) returns (LoginResp)
+	
+	@handler AuthorizationHandler
+	get /auth(AuthorizationReq) returns (AuthorizationResp)
 }

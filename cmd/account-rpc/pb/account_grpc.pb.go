@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
+	AccountRpcService_GenerateToken_FullMethodName = "/pb.AccountRpcService/GenerateToken"
 	AccountRpcService_ValidateToken_FullMethodName = "/pb.AccountRpcService/ValidateToken"
 )
 
@@ -26,6 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountRpcServiceClient interface {
+	GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error)
 	ValidateToken(ctx context.Context, in *TokenValidateReq, opts ...grpc.CallOption) (*TokenValidateResp, error)
 }
 
@@ -35,6 +37,15 @@ type accountRpcServiceClient struct {
 
 func NewAccountRpcServiceClient(cc grpc.ClientConnInterface) AccountRpcServiceClient {
 	return &accountRpcServiceClient{cc}
+}
+
+func (c *accountRpcServiceClient) GenerateToken(ctx context.Context, in *GenerateTokenReq, opts ...grpc.CallOption) (*GenerateTokenResp, error) {
+	out := new(GenerateTokenResp)
+	err := c.cc.Invoke(ctx, AccountRpcService_GenerateToken_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *accountRpcServiceClient) ValidateToken(ctx context.Context, in *TokenValidateReq, opts ...grpc.CallOption) (*TokenValidateResp, error) {
@@ -50,6 +61,7 @@ func (c *accountRpcServiceClient) ValidateToken(ctx context.Context, in *TokenVa
 // All implementations must embed UnimplementedAccountRpcServiceServer
 // for forward compatibility
 type AccountRpcServiceServer interface {
+	GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error)
 	ValidateToken(context.Context, *TokenValidateReq) (*TokenValidateResp, error)
 	mustEmbedUnimplementedAccountRpcServiceServer()
 }
@@ -58,6 +70,9 @@ type AccountRpcServiceServer interface {
 type UnimplementedAccountRpcServiceServer struct {
 }
 
+func (UnimplementedAccountRpcServiceServer) GenerateToken(context.Context, *GenerateTokenReq) (*GenerateTokenResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GenerateToken not implemented")
+}
 func (UnimplementedAccountRpcServiceServer) ValidateToken(context.Context, *TokenValidateReq) (*TokenValidateResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ValidateToken not implemented")
 }
@@ -72,6 +87,24 @@ type UnsafeAccountRpcServiceServer interface {
 
 func RegisterAccountRpcServiceServer(s grpc.ServiceRegistrar, srv AccountRpcServiceServer) {
 	s.RegisterService(&AccountRpcService_ServiceDesc, srv)
+}
+
+func _AccountRpcService_GenerateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GenerateTokenReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AccountRpcServiceServer).GenerateToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AccountRpcService_GenerateToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AccountRpcServiceServer).GenerateToken(ctx, req.(*GenerateTokenReq))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _AccountRpcService_ValidateToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -99,6 +132,10 @@ var AccountRpcService_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.AccountRpcService",
 	HandlerType: (*AccountRpcServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GenerateToken",
+			Handler:    _AccountRpcService_GenerateToken_Handler,
+		},
 		{
 			MethodName: "ValidateToken",
 			Handler:    _AccountRpcService_ValidateToken_Handler,

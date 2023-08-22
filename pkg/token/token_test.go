@@ -40,7 +40,7 @@ func TestParseToken(t *testing.T) {
 		return
 	}
 
-	ret := parseToken.(string)
+	ret := parseToken
 	fmt.Println(ret)
 	if ret == data {
 		fmt.Println("success")
@@ -65,9 +65,25 @@ func TestParseToken2(t *testing.T) {
 		return
 	}
 
-	ret := parseToken.(string)
+	ret := parseToken
 	fmt.Println(ret)
 	if ret == strData {
 		fmt.Println("success")
 	}
+}
+
+func TestParseToken3(t *testing.T) {
+	data := JsonObj{
+		AccountName: "zhang san",
+		Password:    "123456",
+	}
+	token, err := GenerateToken(secretKey, data, time.Hour*24*365)
+	if err != nil {
+		return
+	}
+
+	parseToken, err := ParseToken(token, secretKey)
+
+	fmt.Printf("origin: %#v, parse: %#v \n", data, parseToken)
+
 }

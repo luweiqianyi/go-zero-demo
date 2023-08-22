@@ -22,6 +22,11 @@ func NewAccountRpcServiceServer(svcCtx *svc.ServiceContext) *AccountRpcServiceSe
 	}
 }
 
+func (s *AccountRpcServiceServer) GenerateToken(ctx context.Context, in *pb.GenerateTokenReq) (*pb.GenerateTokenResp, error) {
+	l := logic.NewGenerateTokenLogic(ctx, s.svcCtx)
+	return l.GenerateToken(in)
+}
+
 func (s *AccountRpcServiceServer) ValidateToken(ctx context.Context, in *pb.TokenValidateReq) (*pb.TokenValidateResp, error) {
 	l := logic.NewValidateTokenLogic(ctx, s.svcCtx)
 	return l.ValidateToken(in)

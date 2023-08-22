@@ -1,2 +1,3 @@
 /cmd/account/account.exe
 /docker-env/nginx/log/
+/cmd/account-rpc/account-rpc.exe
