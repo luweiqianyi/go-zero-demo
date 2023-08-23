@@ -1,7 +1,7 @@
-Name: account.rpc
+Name: account-rpc
 ListenOn: 0.0.0.0:8003
 #Etcd:
 #  Hosts:
 #  - 127.0.0.1:2379
 #  Key: account.rpc
-# 这里暂时不用Etcd相关的东西，因为至此项目中还没有引入任何与Etcd相关的内容
+TokenSecretKey: "token-secret-key"

@@ -1,24 +1,62 @@
 version: '3'
 services:
   nginx:
-    image: nginx:latest
-    container_name: nginx-latest
+    image: nginx:1.24.0
+    container_name: nginx-1.24.0
     ports:
       - "8888:8081" #访问主机端口8888,映射到容器端口8081,nginx在Docker内的端口为8081
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./nginx/log:/var/log/nginx
+    depends_on:
+      - account-api
 
-  account:
-    image: account:1.0.0
+  adminer:
+    image: adminer:4.8.1
+    container_name: "adminer"
+    ports:
+      - "8080:8080"
+
+  mysql:
+    image: "mysql:8.0"
+    container_name: "mysql"
+    volumes:
+      - ./mysql/my.cnf:/etc/my.cnf:rw # 挂载本地文件到docker容器,同时修改权限为rw
+      - ./mysql/mysql-init:/docker-entrypoint-initdb.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "123456"
+      MYSQL_DATABASE: "go_zero_demo"
+      TZ: "Asia/Shanghai"
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: "redis:7.0"
+    container_name: "redis"
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/redis.conf:/etc/redis/redis.conf:ro
+      - ./redis/data:/data/:rw
+    entrypoint: [ "redis-server", "/etc/redis/redis.conf" ]
+    environment:
+      TZ: "Asia/Shanghai"
+
+  account-api:
+    image: account-api:1.0.0
     container_name: account-api
     ports:
       - "8002:8002"
     volumes:
       - ./account/etc/account-api.yaml:/usr/local/bin/account/etc/account-api.yaml
-    networks:
-      - default
-      - external_network
+#    networks:
+#      - default
+#      - external_network
+    depends_on:
+      - mysql
+      - account-rpc
+    environment:
+      TZ: "Asia/Shanghai"
 
   account-rpc:
     image: account-rpc:1.0.0
@@ -27,8 +65,16 @@ services:
       - "8003:8003"
     volumes:
       - ./account-rpc/etc/account.yaml:/usr/local/bin/account-rpc/etc/account.yaml
+      - ./account-rpc/etc/redis.yaml:/usr/local/bin/account-rpc/etc/redis.yaml
+#    networks:
+#      - default
+#      - external_network
+    environment:
+      TZ: "Asia/Shanghai"
+    depends_on:
+      - redis
 
-networks:
-  external_network:
-    external:
-      name: chat-services_default
+#networks:
+#  external_network:
+#    external:
+#      name: chat-services_default
